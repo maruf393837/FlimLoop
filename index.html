@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlimLoop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+  
+  
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+
+
+body{
+  font-family: "Lato", sans-serif;
+  
+}
+  
+  
+    .gradient-bg {
+      background: linear-gradient(135deg, #ff4e50, #f9d423);
+    }
+    .movie-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .movie-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .card-title, .card-text {
+      color: #9BA2EE;
+    }
+
+    /* Make the movie poster responsive */
+    .movie-card img {
+      width: 100%; /* Ensure the image scales with the container */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: cover; /* Ensure the image covers the area without distortion */
+    }
+
+    @media (max-width: 767px) {
+      /* Adjust card size for smaller screens */
+      .movie-card {
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+  
+  <!-- Movie Grid Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4 text-center text-white">Latest Movies</h2>
+      <div class="row g-4" id="movie-list">
+        <!-- Movies will be dynamically loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // AOS Initialization
+    AOS.init();
+
+    // Fetch movies from JSON and display on homepage
+    fetch('movies.json')
+      .then(response => response.json())
+      .then(movies => {
+        const movieList = document.getElementById('movie-list');
+        movies.forEach(movie => {
+          const movieCard = document.createElement('div');
+          movieCard.classList.add('col-md-4');
+          movieCard.setAttribute('data-aos', 'zoom-in');
+
+          movieCard.innerHTML = `
+            <a href="${movie.link}" class="text-decoration-none">
+              <div class="card movie-card">
+                <img src="${movie.poster}" class="card-img-top" alt="Movie Poster">
+                <div class="card-body bg-dark text-white">
+                  <h5 class="card-title">${movie.title}</h5>
+                  <p class="card-text">Release Date: ${movie.release_date}</p>
+                </div>
+              </div>
+            </a>
+          `;
+
+          movieList.appendChild(movieCard);
+        });
+      })
+      .catch(error => console.error('Error loading movie data:', error));
+  </script>
+</body>
+</html>
